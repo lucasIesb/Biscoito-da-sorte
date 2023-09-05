@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, Button, Image, StyleSheet } from 'react-native';
 
-
-
-export default function BotaoComFrase() {
+export default function BiscoitoDaSorte() {
   const frasesAleatorias = [
     'A sorte está ao seu lado hoje!',
     'Grandes oportunidades aguardam por você.',
@@ -13,26 +11,25 @@ export default function BotaoComFrase() {
   ];
 
   const [frase, setFrase] = useState('');
-  const [botaoAtivo, setBotaoAtivo] = useState(true);
+  const [imagemBiscoito, setImagemBiscoito] = useState(require('../assets/biscoito_fechado.png'));
 
   const exibirFraseAleatoria = () => {
-    if (botaoAtivo) {
-      const indiceAleatorio = Math.floor(Math.random() * frasesAleatorias.length);
-      setFrase(frasesAleatorias[indiceAleatorio]);
-      setBotaoAtivo(false);
-    }
+    const indiceAleatorio = Math.floor(Math.random() * frasesAleatorias.length);
+    setFrase(frasesAleatorias[indiceAleatorio]);
+    setImagemBiscoito(require('../assets/biscoito_aberto.png'));
   };
 
-  const reativarBotao = () => {
-    setBotaoAtivo(true);
+  const reativarImagem = () => {
+    setFrase('');
+    setImagemBiscoito(require('../assets/biscoito_fechado.png'));
   };
 
   return (
     <View style={styles.container}>
+      <Image source={imagemBiscoito} style={styles.imagemBiscoito} />
       <Text style={styles.frase}>{frase}</Text>
-      <Button title="Quebrar Biscoito" onPress={exibirFraseAleatoria} disabled={!botaoAtivo} />
-      <Button title="Reiniciar Biscoito" onPress={reativarBotao} disabled={botaoAtivo} />
-
+      <Button title="Quebrar Biscoito" onPress={exibirFraseAleatoria} disabled={frase !== ''} />
+      <Button title="Reiniciar Biscoito" onPress={reativarImagem} disabled={frase === ''} />
     </View>
   );
 }
@@ -40,8 +37,14 @@ export default function BotaoComFrase() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'center',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  imagemBiscoito: {
+    width: 200,
+    height: 200,
+    resizeMode: 'contain',
   },
   frase: {
     fontSize: 24,
